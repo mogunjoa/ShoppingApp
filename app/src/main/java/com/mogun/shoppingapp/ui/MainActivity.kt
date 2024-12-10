@@ -1,4 +1,4 @@
-package com.mogun.shoppingapp
+package com.mogun.shoppingapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
