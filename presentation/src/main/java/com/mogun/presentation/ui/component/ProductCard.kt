@@ -77,19 +77,19 @@ fun ProductCard(product: Product, onClick: (Product) -> Unit?) {
 }
 
 @Composable
-private fun Price(product: Product) {
+fun Price(product: Product) {
     when (product.price.salesStatus) {
         SalesStatus.ON_SALE -> {
             Text(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                text = "${product.price.originalPrice}원"
+                text = "${product.price.originPrice}원"
             )
         }
         SalesStatus.ON_DISCOUNT -> {
             Text(
                 fontSize = 14.sp,
-                text = "${product.price.originalPrice}원",
+                text = "${product.price.originPrice}원",
                 style = TextStyle(textDecoration = TextDecoration.LineThrough)
             )
             Text(

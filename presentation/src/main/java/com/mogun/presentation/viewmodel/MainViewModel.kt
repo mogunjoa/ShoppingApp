@@ -2,6 +2,9 @@ package com.mogun.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mogun.domain.model.Banner
+import com.mogun.domain.model.BannerList
+import com.mogun.domain.model.Product
 import com.mogun.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,22 @@ class MainViewModel @Inject constructor(useCase: MainUseCase): ViewModel() {
         viewModelScope.launch {
             _columnCount.emit(count)
         }
+    }
+
+    fun openProduct(product: Product) {
+
+    }
+
+    fun openCarouselProduct(product: Product) {
+
+    }
+
+    fun openBanner(banner: Banner) {
+
+    }
+
+    fun openBannerList(banner: BannerList) {
+
     }
 
     companion object {

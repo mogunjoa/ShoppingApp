@@ -26,7 +26,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerListCard(model: BannerList) {
+fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
     val pagerState = rememberPagerState()
 
     LaunchedEffect(
@@ -42,7 +42,7 @@ fun BannerListCard(model: BannerList) {
                 .fillMaxWidth()
                 .padding(10.dp)
                 .shadow(20.dp),
-            onClick = {}
+            onClick = { onClick(model) }
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
