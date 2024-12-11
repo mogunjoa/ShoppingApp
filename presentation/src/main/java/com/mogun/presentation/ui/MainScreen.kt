@@ -29,13 +29,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.mogun.presentation.ui.main.MainInsideScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 import com.mogun.presentation.viewmodel.MainViewModel
 
 sealed class MainNavigationItem(val route: String, val icon: ImageVector, val name: String) {
     object Main : MainNavigationItem("Main", Icons.Filled.Home, "Main")
-    object Category : MainNavigationItem("Category", Icons.Filled.Star,  "Category")
-    object MyPage : MainNavigationItem("MyPage", Icons.Filled.AccountBox,  "MyPage")
+    object Category : MainNavigationItem("Category", Icons.Filled.Star, "Category")
+    object MyPage : MainNavigationItem("MyPage", Icons.Filled.AccountBox, "MyPage")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +54,9 @@ fun MainScreen() {
         }
     ) {
         Spacer(modifier = Modifier.padding(it))
-        MainNaviationScreen(navController)
+        MainNaviationScreen(
+            viewModel = viewModel, navController = navController,
+        )
     }
 }
 
@@ -112,13 +115,14 @@ fun MainBottomNavigationBar(navController: NavHostController) {
 }
 
 @Composable
-fun MainNaviationScreen(navController: NavHostController) {
+fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = MainNavigationItem.Main.route,
     ) {
         composable(MainNavigationItem.Main.route) {
-            Text(text = "Hello Main")
+            Spacer(modifier = Modifier.padding())
+            MainInsideScreen(viewModel)
         }
         composable(MainNavigationItem.Category.route) {
             Text(text = "Hello Category")
