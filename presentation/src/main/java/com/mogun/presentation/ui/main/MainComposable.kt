@@ -11,10 +11,12 @@ import com.mogun.domain.model.BannerList
 import com.mogun.domain.model.Carousel
 import com.mogun.domain.model.ModelType
 import com.mogun.domain.model.Product
+import com.mogun.domain.model.Ranking
 import com.mogun.presentation.ui.component.BannerCard
 import com.mogun.presentation.ui.component.BannerListCard
 import com.mogun.presentation.ui.component.CarouselCard
 import com.mogun.presentation.ui.component.ProductCard
+import com.mogun.presentation.ui.component.RankingCard
 import com.mogun.presentation.viewmodel.MainViewModel
 
 @Composable
@@ -44,6 +46,9 @@ fun MainInsideScreen(viewModel: MainViewModel) {
                 is Carousel -> CarouselCard(model = item) { model ->
                     viewModel.openCarouselProduct(model)
                 }
+                is Ranking -> RankingCard(model = item) { model ->
+                    viewModel.openRankinglProduct(model)
+                }
             }
         }
     }
@@ -52,7 +57,7 @@ fun MainInsideScreen(viewModel: MainViewModel) {
 private fun getSpanCountByType(type: ModelType, defaultColumnCount: Int): Int {
     return when (type) {
         ModelType.PRODUCT -> 1
-        ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL -> defaultColumnCount
+        ModelType.BANNER, ModelType.BANNER_LIST, ModelType.CAROUSEL, ModelType.RANKING -> defaultColumnCount
     }
 }
 

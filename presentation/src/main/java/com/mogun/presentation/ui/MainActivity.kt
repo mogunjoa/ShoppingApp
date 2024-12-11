@@ -47,3 +47,4 @@ class MainActivity : ComponentActivity() {
         private const val DEFAULT_COLUMN_SIZE = 160
     }
 }
+
