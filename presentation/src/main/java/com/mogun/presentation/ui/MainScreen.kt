@@ -31,7 +31,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mogun.presentation.ui.main.MainInsideScreen
+import com.mogun.presentation.ui.main.CategoryScreen
+import com.mogun.presentation.ui.main.HomeScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 import com.mogun.presentation.viewmodel.MainViewModel
 
@@ -124,10 +125,10 @@ fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostControll
         startDestination = MainNavigationItem.Main.route,
     ) {
         composable(MainNavigationItem.Main.route) {
-            MainInsideScreen(viewModel)
+            HomeScreen(viewModel)
         }
         composable(MainNavigationItem.Category.route) {
-            Text(text = "Hello Category")
+            CategoryScreen(viewModel)
         }
         composable(MainNavigationItem.MyPage.route) {
             Text(text = "Hello MyPage")

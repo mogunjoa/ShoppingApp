@@ -1,7 +1,9 @@
 package com.mogun.shoppingapp.di
 
+import com.mogun.data.repository.CategoryRepositoryImpl
 import com.mogun.data.repository.MainRepositoryImpl
 import com.mogun.data.repository.TempRepositoryImpl
+import com.mogun.domain.repository.CategoryRepository
 import com.mogun.domain.repository.MainRepository
 import com.mogun.domain.repository.TempRepository
 import dagger.Binds
@@ -16,9 +18,13 @@ interface DataModule {
 
     @Binds
     @Singleton
-    fun bindTempRepository(tempRepository: TempRepositoryImpl): TempRepository
+    fun bindTempRepository(tempRepositoryImpl: TempRepositoryImpl): TempRepository
 
     @Binds
     @Singleton
-    fun bindMainRepository(mainRepository: MainRepositoryImpl): MainRepository
+    fun bindMainRepository(mainRepositoryImpl: MainRepositoryImpl): MainRepository
+
+    @Binds
+    @Singleton
+    fun bindCategoryRepository(categoryRepositoryImpl: CategoryRepositoryImpl): CategoryRepository
 }

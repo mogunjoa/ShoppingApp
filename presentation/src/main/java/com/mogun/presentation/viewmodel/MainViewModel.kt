@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mogun.domain.model.Banner
 import com.mogun.domain.model.BannerList
 import com.mogun.domain.model.Product
+import com.mogun.domain.usecase.CategoryUseCase
 import com.mogun.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +14,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(useCase: MainUseCase): ViewModel() {
+class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCase: CategoryUseCase): ViewModel() {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount: StateFlow<Int> = _columnCount
-    val modelList = useCase.getModelList()
+    val modelList = mainUseCase.getModelList()
+    val categories = categoryUseCase.getCategories()
 
     fun openSearchForm() {
         println("OPEN SEARCH FORM")
