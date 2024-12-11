@@ -1,4 +1,5 @@
 [versions]
+accompanistPager = "0.27.0"
 agp = "8.7.3"
 gson = "2.11.0"
 hiltNavigationCompose = "1.2.0"
@@ -17,6 +18,8 @@ navigationCompose = "2.8.4"
 roomRuntime = "2.6.1"
 
 [libraries]
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

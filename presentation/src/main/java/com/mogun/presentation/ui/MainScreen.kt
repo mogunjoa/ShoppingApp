@@ -1,6 +1,6 @@
 package com.mogun.presentation.ui
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -21,8 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -48,15 +50,17 @@ fun MainScreen() {
 
     Scaffold(
         topBar = { Header(viewModel) },
+        containerColor = Color.White,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             MainBottomNavigationBar(navController)
         }
     ) {
-        Spacer(modifier = Modifier.padding(it))
-        MainNaviationScreen(
-            viewModel = viewModel, navController = navController,
-        )
+        Box(modifier = Modifier.padding(top = it.calculateTopPadding() + 10.dp)) {
+            MainNaviationScreen(
+                viewModel = viewModel, navController = navController,
+            )
+        }
     }
 }
 
@@ -110,7 +114,6 @@ fun MainBottomNavigationBar(navController: NavHostController) {
                 },
             )
         }
-
     }
 }
 
@@ -121,7 +124,6 @@ fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostControll
         startDestination = MainNavigationItem.Main.route,
     ) {
         composable(MainNavigationItem.Main.route) {
-            Spacer(modifier = Modifier.padding())
             MainInsideScreen(viewModel)
         }
         composable(MainNavigationItem.Category.route) {
