@@ -20,7 +20,7 @@ import com.mogun.presentation.ui.component.RankingCard
 import com.mogun.presentation.viewmodel.MainViewModel
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
+fun MainHomeScreen(viewModel: MainViewModel) {
     val modelList by viewModel.modelList.collectAsState(initial = listOf())
     val columnCount by viewModel.columnCount.collectAsState()
 

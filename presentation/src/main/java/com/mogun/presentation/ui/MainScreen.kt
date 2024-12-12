@@ -3,10 +3,7 @@ package com.mogun.presentation.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,25 +19,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mogun.presentation.ui.main.CategoryScreen
-import com.mogun.presentation.ui.main.HomeScreen
+import androidx.navigation.navArgument
+import com.google.gson.Gson
+import com.mogun.domain.model.Category
+import com.mogun.presentation.ui.category.CategoryScreen
+import com.mogun.presentation.ui.main.MainCategoryScreen
+import com.mogun.presentation.ui.main.MainHomeScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 import com.mogun.presentation.viewmodel.MainViewModel
-
-sealed class MainNavigationItem(val route: String, val icon: ImageVector, val name: String) {
-    object Main : MainNavigationItem("Main", Icons.Filled.Home, "Main")
-    object Category : MainNavigationItem("Category", Icons.Filled.Star, "Category")
-    object MyPage : MainNavigationItem("MyPage", Icons.Filled.AccountBox, "MyPage")
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,13 +43,17 @@ fun MainScreen() {
     val viewModel = hiltViewModel<MainViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = { Header(viewModel) },
         containerColor = Color.White,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
-            MainBottomNavigationBar(navController)
+            if (NavigationItem.MainNav.isMainRoute(currentRoute)) {
+                MainBottomNavigationBar(navController, currentRoute)
+            }
         }
     ) {
         Box(modifier = Modifier.padding(top = it.calculateTopPadding() + 10.dp)) {
@@ -81,18 +80,14 @@ fun Header(viewModel: MainViewModel) {
 }
 
 @Composable
-fun MainBottomNavigationBar(navController: NavHostController) {
+fun MainBottomNavigationBar(navController: NavHostController, currentRoute: String?) {
     val bottomNavigationItems = listOf(
-        MainNavigationItem.Main,
-        MainNavigationItem.Category,
-        MainNavigationItem.MyPage,
+        NavigationItem.MainNav.Home,
+        NavigationItem.MainNav.Category,
+        NavigationItem.MainNav.MyPage,
     )
 
     NavigationBar {
-        // 백스택 관리
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-
         bottomNavigationItems.forEach { item ->
             NavigationBarItem(
                 icon = {
@@ -122,19 +117,29 @@ fun MainBottomNavigationBar(navController: NavHostController) {
 fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = MainNavigationItem.Main.route,
+        startDestination = NavigationRouteName.MAIN_HOME,
     ) {
-        composable(MainNavigationItem.Main.route) {
-            HomeScreen(viewModel)
+        composable(NavigationRouteName.MAIN_HOME) {
+            MainHomeScreen(viewModel)
         }
-        composable(MainNavigationItem.Category.route) {
-            CategoryScreen(viewModel)
+        composable(NavigationRouteName.MAIN_CATEGORY) {
+            MainCategoryScreen(viewModel, navController)
         }
-        composable(MainNavigationItem.MyPage.route) {
+        composable(NavigationRouteName.MAIN_MY_PAGE) {
             Text(text = "Hello MyPage")
         }
-    }
+        composable(
+            NavigationRouteName.CATEGORY + "/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) {
+            val categoryString = it.arguments?.getString("category")
+            val category = Gson().fromJson(categoryString, Category::class.java)
 
+            if (category != null) {
+                CategoryScreen(category = category)
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)

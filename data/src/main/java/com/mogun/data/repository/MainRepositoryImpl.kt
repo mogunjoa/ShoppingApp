@@ -3,6 +3,7 @@ package com.mogun.data.repository
 import android.content.Context
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.mogun.data.datasource.ProductDataSource
 import com.mogun.data.deserializer.BaseModelDeserializer
 import com.mogun.domain.model.BaseModel
 import com.mogun.domain.model.Product
@@ -14,17 +15,9 @@ import java.io.InputStreamReader
 import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val dataSource: ProductDataSource
 ): MainRepository {
-    override fun getModelList(): Flow<List<BaseModel>> = flow {
-        val inputStream = context.assets.open("product_list.json")
-        val inputStreamBuilder = InputStreamReader(inputStream)
-        val jsonString = inputStreamBuilder.readText()
-        val type = object : TypeToken<List<BaseModel>>() {}.type
-
-        emit(GsonBuilder()
-            .registerTypeAdapter(BaseModel::class.java, BaseModelDeserializer())
-            .create()
-            .fromJson(jsonString, type))
+    override fun getModelList(): Flow<List<BaseModel>> {
+        return dataSource.getProducts()
     }
 }
