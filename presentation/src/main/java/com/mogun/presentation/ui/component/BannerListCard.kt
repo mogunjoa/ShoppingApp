@@ -22,11 +22,13 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.mogun.domain.model.BannerList
 import com.mogun.presentation.R
+import com.mogun.presentation.model.BannerListVM
+import com.mogun.presentation.model.PresentationVM
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
+fun BannerListCard(presentationVM: BannerListVM) {
     val pagerState = rememberPagerState()
 
     LaunchedEffect(
@@ -35,14 +37,14 @@ fun BannerListCard(model: BannerList, onClick: (BannerList) -> Unit) {
         autoScrollInfinity(pagerState)
     }
 
-    HorizontalPager(count = model.imageList.size, state = pagerState) {page ->
+    HorizontalPager(count = presentationVM.model.imageList.size, state = pagerState) {page ->
         Card(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
                 .shadow(20.dp),
-            onClick = { onClick(model) }
+            onClick = { presentationVM.openBannerList(presentationVM.model.bannerId) }
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()

@@ -30,11 +30,7 @@ fun CategoryScreen(
         contentPadding = PaddingValues(10.dp)
     ) {
         items(products.size) { index ->
-            ProductCard(
-                product = products[index],
-            ) { product ->
-                viewModel.openProduct(product)
-            }
+            ProductCard(presentationVM = products[index])
         }
     }
 }

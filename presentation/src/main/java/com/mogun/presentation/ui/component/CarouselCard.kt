@@ -28,15 +28,16 @@ import androidx.compose.ui.unit.sp
 import com.mogun.domain.model.Carousel
 import com.mogun.domain.model.Product
 import com.mogun.presentation.R
+import com.mogun.presentation.model.CarouselVM
 
 @Composable
-fun CarouselCard(model: Carousel, onClick: (Product) -> Unit) {
+fun CarouselCard(presentationVM: CarouselVM) {
     val scrollState = rememberLazyListState()
     Column {
         Text(
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-            text = model.title,
+            text = presentationVM.model.title,
             modifier = Modifier.padding(10.dp)
         )
         LazyRow(
@@ -45,8 +46,10 @@ fun CarouselCard(model: Carousel, onClick: (Product) -> Unit) {
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            items(model.productList.size) {
-                CarouselProductCard(product = model.productList[it], onClick)
+            items(presentationVM.model.productList.size) { index ->
+                CarouselProductCard(product = presentationVM.model.productList[index]) { model ->
+                    presentationVM.openCarouselProduct(model)
+                }
             }
         }
     }

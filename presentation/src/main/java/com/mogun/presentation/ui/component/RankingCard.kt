@@ -20,19 +20,18 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.mogun.domain.model.Product
-import com.mogun.domain.model.Ranking
 import com.mogun.presentation.R
-import java.nio.file.WatchEvent
+import com.mogun.presentation.model.RankingVM
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun RankingCard(model: Ranking, onClick: (Product) -> Unit) {
+fun RankingCard(presentationVM: RankingVM) {
     val pagerState = rememberPagerState()
-    val pageCount = model.productList.size / DEFAULT_RANKING_ITEM_COUNT
+    val pageCount = presentationVM.model.productList.size / DEFAULT_RANKING_ITEM_COUNT
 
     Column {
         Text(
-            text = model.title,
+            text = presentationVM.model.title,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
@@ -45,19 +44,22 @@ fun RankingCard(model: Ranking, onClick: (Product) -> Unit) {
             Column {
                 RankingProductCard(
                     index = index * 3,
-                    product = model.productList[index * 3],
-                    onClick = onClick
-                )
+                    product = presentationVM.model.productList[index * 3],
+                ) { product ->
+                    presentationVM.openRankingProduct(product)
+                }
                 RankingProductCard(
                     index = index * 3 + 1,
-                    product = model.productList[index * 3 + 1],
-                    onClick = onClick
-                )
+                    product = presentationVM.model.productList[index * 3 + 1],
+                ) { product ->
+                    presentationVM.openRankingProduct(product)
+                }
                 RankingProductCard(
                     index = index * 3 + 2,
-                    product = model.productList[index * 3 + 2],
-                    onClick = onClick
-                )
+                    product = presentationVM.model.productList[index * 3 + 2],
+                ) { product ->
+                    presentationVM.openRankingProduct(product)
+                }
             }
         }
     }
