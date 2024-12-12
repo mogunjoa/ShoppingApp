@@ -31,9 +31,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.mogun.domain.model.Category
+import com.mogun.domain.model.Product
 import com.mogun.presentation.ui.category.CategoryScreen
 import com.mogun.presentation.ui.main.MainCategoryScreen
 import com.mogun.presentation.ui.main.MainHomeScreen
+import com.mogun.presentation.ui.product_detail.ProductDetailScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 import com.mogun.presentation.viewmodel.MainViewModel
 
@@ -58,7 +60,7 @@ fun MainScreen() {
     ) {
         Box(modifier = Modifier.padding(top = it.calculateTopPadding() + 10.dp)) {
             MainNaviationScreen(
-                viewModel = viewModel, navController = navController,
+                viewModel = viewModel, navHostController = navController,
             )
         }
     }
@@ -114,16 +116,16 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 }
 
 @Composable
-fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostController) {
+fun MainNaviationScreen(viewModel: MainViewModel, navHostController: NavHostController) {
     NavHost(
-        navController = navController,
+        navController = navHostController,
         startDestination = NavigationRouteName.MAIN_HOME,
     ) {
         composable(NavigationRouteName.MAIN_HOME) {
-            MainHomeScreen(viewModel)
+            MainHomeScreen(navHostController, viewModel)
         }
         composable(NavigationRouteName.MAIN_CATEGORY) {
-            MainCategoryScreen(viewModel, navController)
+            MainCategoryScreen(viewModel, navHostController)
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
             Text(text = "Hello MyPage")
@@ -136,7 +138,16 @@ fun MainNaviationScreen(viewModel: MainViewModel, navController: NavHostControll
             val category = Gson().fromJson(categoryString, Category::class.java)
 
             if (category != null) {
-                CategoryScreen(category = category)
+                CategoryScreen(navHostController = navHostController, category = category)
+            }
+        }
+        composable(
+            NavigationRouteName.PRODUCT_DETAIL + "/{product}",
+            arguments = listOf(navArgument("product") { type = NavType.StringType })
+        ) {
+            val productString = it.arguments?.getString("product")
+            if(productString != null) {
+                ProductDetailScreen(productString)
             }
         }
     }

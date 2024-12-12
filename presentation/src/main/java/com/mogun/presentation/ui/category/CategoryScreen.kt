@@ -12,11 +12,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mogun.domain.model.Category
 import com.mogun.presentation.viewmodel.category.CategoryViewModel
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import com.mogun.presentation.ui.component.ProductCard
 
 @Composable
 fun CategoryScreen(
     category: Category,
+    navHostController: NavHostController,
     viewModel: CategoryViewModel = hiltViewModel(),
 ) {
     val products by viewModel.products.collectAsState()
@@ -30,7 +32,7 @@ fun CategoryScreen(
         contentPadding = PaddingValues(10.dp)
     ) {
         items(products.size) { index ->
-            ProductCard(presentationVM = products[index])
+            ProductCard(navHostController = navHostController, presentationVM = products[index])
         }
     }
 }

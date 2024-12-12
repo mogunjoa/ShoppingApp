@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import com.mogun.domain.model.Banner
 import com.mogun.domain.model.BannerList
 import com.mogun.domain.model.Carousel
@@ -25,7 +26,7 @@ import com.mogun.presentation.ui.component.RankingCard
 import com.mogun.presentation.viewmodel.MainViewModel
 
 @Composable
-fun MainHomeScreen(viewModel: MainViewModel) {
+fun MainHomeScreen(navHostController: NavHostController, viewModel: MainViewModel) {
     val modelList by viewModel.modelList.collectAsState(initial = listOf())
     val columnCount by viewModel.columnCount.collectAsState()
 
@@ -39,11 +40,11 @@ fun MainHomeScreen(viewModel: MainViewModel) {
 
             val item = modelList[it]
             when (item) {
-                is ProductVM -> ProductCard(presentationVM = item)
+                is ProductVM -> ProductCard(navHostController = navHostController, presentationVM = item)
                 is BannerVM -> BannerCard(presentationVM = item)
                 is BannerListVM -> BannerListCard(presentationVM = item)
-                is CarouselVM -> CarouselCard(presentationVM = item)
-                is RankingVM -> RankingCard(presentationVM = item)
+                is CarouselVM -> CarouselCard(navHostController = navHostController, presentationVM = item)
+                is RankingVM -> RankingCard(navHostController = navHostController, presentationVM = item)
             }
         }
     }

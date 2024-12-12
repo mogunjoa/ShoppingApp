@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.mogun.domain.model.Category
 import com.mogun.domain.model.Price
 import com.mogun.domain.model.Product
@@ -37,7 +39,7 @@ import com.mogun.presentation.ui.theme.Purple80
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 
 @Composable
-fun ProductCard(presentationVM: ProductVM) {
+fun ProductCard(navHostController: NavHostController, presentationVM: ProductVM) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -48,6 +50,7 @@ fun ProductCard(presentationVM: ProductVM) {
         colors = CardDefaults.cardColors(
             containerColor = Color.White // 배경색을 흰색으로 설정
         ),
+        onClick = { presentationVM.openProduct(navHostController, presentationVM.model) }
     ) {
         Column(
             modifier = Modifier
@@ -117,6 +120,7 @@ fun Price(product: Product) {
 private fun PreviewProductCard() {
     ShoppingAppTheme {
         ProductCard(
+            rememberNavController(),
             ProductVM(
                 model = Product(
                     productId = "1",
@@ -137,8 +141,10 @@ private fun PreviewProductCard() {
                     isFreeShipping = false,
                 ),
                 object : ProductDelegate {
-                    override fun openProduct(product: Product) {
-
+                    override fun openProduct(
+                        navHostController: NavHostController,
+                        product: Product
+                    ) {
                     }
                 }
             )
@@ -150,6 +156,7 @@ private fun PreviewProductCard() {
 @Composable
 private fun PreviewProductCardDiscount() {
     ProductCard(
+        rememberNavController(),
         ProductVM(
             model = Product(
                 productId = "1",
@@ -170,7 +177,10 @@ private fun PreviewProductCardDiscount() {
                 isFreeShipping = false,
             ),
             object : ProductDelegate {
-                override fun openProduct(product: Product) {
+                override fun openProduct(
+                    navHostController: NavHostController,
+                    product: Product
+                ) {
 
                 }
             }
@@ -182,6 +192,7 @@ private fun PreviewProductCardDiscount() {
 @Composable
 private fun PreviewProductCardSoldOut() {
         ProductCard(
+            rememberNavController(),
             ProductVM(
                 model = Product(
                     productId = "1",
@@ -202,7 +213,10 @@ private fun PreviewProductCardSoldOut() {
                     isFreeShipping = false,
                 ),
                 object : ProductDelegate {
-                    override fun openProduct(product: Product) {
+                    override fun openProduct(
+                        navHostController: NavHostController,
+                        product: Product
+                    ) {
 
                     }
                 }

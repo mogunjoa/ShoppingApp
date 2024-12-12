@@ -48,16 +48,16 @@ class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCas
         }
     }
 
-    override fun openProduct(product: Product) {
-
+    override fun openProduct(navController: NavHostController,product: Product) {
+        NavigationUtil.navigate(navController, NavigationRouteName.PRODUCT_DETAIL, product)
     }
 
     override fun openBanner(bannerId: String) {
 
     }
 
-    override fun openCategory(navController: NavHostController, category: Category) {
-        NavigationUtil.navigate(navController, NavigationRouteName.CATEGORY, category)
+    override fun openCategory(navHostController: NavHostController, category: Category) {
+        NavigationUtil.navigate(navHostController, NavigationRouteName.CATEGORY, category)
     }
 
     private fun convertToPresentationVM(list: List<BaseModel>): List<PresentationVM<out BaseModel>> {

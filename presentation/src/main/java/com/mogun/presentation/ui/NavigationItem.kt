@@ -6,10 +6,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mogun.domain.model.Category
+import com.mogun.domain.model.Product
 import com.mogun.presentation.ui.NavigationRouteName.CATEGORY
 import com.mogun.presentation.ui.NavigationRouteName.MAIN_CATEGORY
 import com.mogun.presentation.ui.NavigationRouteName.MAIN_HOME
 import com.mogun.presentation.ui.NavigationRouteName.MAIN_MY_PAGE
+import com.mogun.presentation.ui.NavigationRouteName.PRODUCT_DETAIL
 
 sealed class NavigationItem(open val route: String) {
     sealed class MainNav(override val route: String, val icon: ImageVector, val name: String): NavigationItem(route) {
@@ -28,6 +30,7 @@ sealed class NavigationItem(open val route: String) {
     }
 
     data class CategoryNav( val category: Category): NavigationItem(CATEGORY)
+    data class ProductNav(val product: Product): NavigationItem(PRODUCT_DETAIL)
 }
 
 object NavigationRouteName {
@@ -35,4 +38,5 @@ object NavigationRouteName {
     const val MAIN_CATEGORY = "main_category"
     const val MAIN_MY_PAGE = "main_myPage"
     const val CATEGORY = "category"
+    const val PRODUCT_DETAIL = "product_detail"
 }

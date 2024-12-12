@@ -3,10 +3,8 @@ package com.mogun.presentation.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -25,13 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mogun.domain.model.Carousel
+import androidx.navigation.NavHostController
 import com.mogun.domain.model.Product
 import com.mogun.presentation.R
 import com.mogun.presentation.model.CarouselVM
 
 @Composable
-fun CarouselCard(presentationVM: CarouselVM) {
+fun CarouselCard(navHostController: NavHostController, presentationVM: CarouselVM) {
     val scrollState = rememberLazyListState()
     Column {
         Text(
@@ -48,7 +46,7 @@ fun CarouselCard(presentationVM: CarouselVM) {
         ) {
             items(presentationVM.model.productList.size) { index ->
                 CarouselProductCard(product = presentationVM.model.productList[index]) { model ->
-                    presentationVM.openCarouselProduct(model)
+                    presentationVM.openCarouselProduct(navHostController, model)
                 }
             }
         }

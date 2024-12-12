@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import com.mogun.domain.model.Category
+import com.mogun.domain.model.Product
 
 object NavigationUtil {
     fun navigate(
@@ -24,6 +25,9 @@ object NavigationUtil {
                 }
                 is Category -> {
                     argument = String.format("/%s", Uri.parse(Gson().toJson(args)))
+                }
+                is Product -> {
+                    argument = String.format("/%s", args.productId)
                 }
             }
         }
