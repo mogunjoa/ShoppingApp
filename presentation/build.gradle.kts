@@ -43,6 +43,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.activity)
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.navigation.compose)
@@ -54,6 +55,12 @@ dependencies {
 
     // Gson
     implementation(libs.gson)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -29,11 +29,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.gson.Gson
 import com.mogun.domain.model.Category
 import com.mogun.presentation.ui.category.CategoryScreen
 import com.mogun.presentation.ui.main.MainCategoryScreen
 import com.mogun.presentation.ui.main.MainHomeScreen
+import com.mogun.presentation.ui.main.MyPageScreen
 import com.mogun.presentation.ui.product_detail.ProductDetailScreen
 import com.mogun.presentation.ui.search.SearchScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
@@ -41,7 +43,7 @@ import com.mogun.presentation.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(googleSignInClient: GoogleSignInClient) {
     val viewModel = hiltViewModel<MainViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
@@ -50,7 +52,7 @@ fun MainScreen() {
 
     Scaffold(
         topBar = {
-            if(NavigationItem.MainNav.isMainRoute(currentRoute)) {
+            if (NavigationItem.MainNav.isMainRoute(currentRoute)) {
                 MainHeader(viewModel = viewModel, navHostController = navController)
             }
         },
@@ -64,7 +66,9 @@ fun MainScreen() {
     ) {
         Box(modifier = Modifier.padding(top = it.calculateTopPadding() + 10.dp)) {
             MainNaviationScreen(
-                viewModel = viewModel, navHostController = navController,
+                viewModel = viewModel,
+                navHostController = navController,
+                googleSignInClient = googleSignInClient
             )
         }
     }
@@ -120,7 +124,11 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 }
 
 @Composable
-fun MainNaviationScreen(viewModel: MainViewModel, navHostController: NavHostController) {
+fun MainNaviationScreen(
+    viewModel: MainViewModel,
+    navHostController: NavHostController,
+    googleSignInClient: GoogleSignInClient
+) {
     NavHost(
         navController = navHostController,
         startDestination = NavigationRouteName.MAIN_HOME,
@@ -132,7 +140,7 @@ fun MainNaviationScreen(viewModel: MainViewModel, navHostController: NavHostCont
             MainCategoryScreen(viewModel, navHostController)
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
-            Text(text = "Hello MyPage")
+            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",
@@ -157,13 +165,5 @@ fun MainNaviationScreen(viewModel: MainViewModel, navHostController: NavHostCont
         composable(NavigationRouteName.SEARCH) {
             SearchScreen(navHostController)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ShoppingAppTheme {
-        MainScreen()
     }
 }

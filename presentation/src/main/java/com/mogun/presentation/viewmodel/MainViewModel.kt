@@ -3,6 +3,7 @@ package com.mogun.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.mogun.domain.model.AccountInfo
 import com.mogun.domain.model.Banner
 import com.mogun.domain.model.BannerList
 import com.mogun.domain.model.BaseModel
@@ -10,6 +11,7 @@ import com.mogun.domain.model.Carousel
 import com.mogun.domain.model.Category
 import com.mogun.domain.model.Product
 import com.mogun.domain.model.Ranking
+import com.mogun.domain.usecase.AccountUseCase
 import com.mogun.domain.usecase.CategoryUseCase
 import com.mogun.domain.usecase.MainUseCase
 import com.mogun.presentation.deligate.BannerDelegate
@@ -31,12 +33,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCase: CategoryUseCase)
+class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCase: CategoryUseCase, private val accountUseCase: AccountUseCase)
     : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount: StateFlow<Int> = _columnCount
     val modelList = mainUseCase.getModelList().map(::convertToPresentationVM)
     val categories = categoryUseCase.getCategories()
+    val accountInfo = accountUseCase.getAccountInfo()
+
+    fun signInGoogle(accountInfo: AccountInfo) {
+        viewModelScope.launch {
+            accountUseCase.signInGoogle(accountInfo)
+        }
+    }
+
+    fun signOutGoogle() {
+        viewModelScope.launch {
+            accountUseCase.signOutGoogle()
+        }
+    }
 
     fun openSearchForm(navHostController: NavHostController) {
         NavigationUtil.navigate(navHostController, NavigationRouteName.SEARCH)
