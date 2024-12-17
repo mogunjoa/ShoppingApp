@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
+    // KAKAO
+    implementation(libs.v2.user) // 카카오 로그인 API 모듈
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

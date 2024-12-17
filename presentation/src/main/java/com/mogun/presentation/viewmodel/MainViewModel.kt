@@ -41,15 +41,15 @@ class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCas
     val categories = categoryUseCase.getCategories()
     val accountInfo = accountUseCase.getAccountInfo()
 
-    fun signInGoogle(accountInfo: AccountInfo) {
+    fun signIn(accountInfo: AccountInfo) {
         viewModelScope.launch {
-            accountUseCase.signInGoogle(accountInfo)
+            accountUseCase.signIn(accountInfo)
         }
     }
 
-    fun signOutGoogle() {
+    fun signOut() {
         viewModelScope.launch {
-            accountUseCase.signOutGoogle()
+            accountUseCase.signOut()
         }
     }
 
