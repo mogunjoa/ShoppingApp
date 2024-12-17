@@ -31,11 +31,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.mogun.domain.model.Category
-import com.mogun.domain.model.Product
 import com.mogun.presentation.ui.category.CategoryScreen
 import com.mogun.presentation.ui.main.MainCategoryScreen
 import com.mogun.presentation.ui.main.MainHomeScreen
 import com.mogun.presentation.ui.product_detail.ProductDetailScreen
+import com.mogun.presentation.ui.search.SearchScreen
 import com.mogun.presentation.ui.theme.ShoppingAppTheme
 import com.mogun.presentation.viewmodel.MainViewModel
 
@@ -49,7 +49,11 @@ fun MainScreen() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        topBar = { Header(viewModel) },
+        topBar = {
+            if(NavigationItem.MainNav.isMainRoute(currentRoute)) {
+                MainHeader(viewModel = viewModel, navHostController = navController)
+            }
+        },
         containerColor = Color.White,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
@@ -68,12 +72,12 @@ fun MainScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Header(viewModel: MainViewModel) {
+fun MainHeader(viewModel: MainViewModel, navHostController: NavHostController) {
     TopAppBar(
         title = { Text(text = "Shopping App") },
         actions = {
             IconButton(onClick = {
-                viewModel.openSearchForm()
+                viewModel.openSearchForm(navHostController)
             }) {
                 Icon(Icons.Filled.Search, "SearchIcon")
             }
@@ -146,9 +150,12 @@ fun MainNaviationScreen(viewModel: MainViewModel, navHostController: NavHostCont
             arguments = listOf(navArgument("product") { type = NavType.StringType })
         ) {
             val productString = it.arguments?.getString("product")
-            if(productString != null) {
+            if (productString != null) {
                 ProductDetailScreen(productString)
             }
+        }
+        composable(NavigationRouteName.SEARCH) {
+            SearchScreen(navHostController)
         }
     }
 }

@@ -38,8 +38,8 @@ class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCas
     val modelList = mainUseCase.getModelList().map(::convertToPresentationVM)
     val categories = categoryUseCase.getCategories()
 
-    fun openSearchForm() {
-        println("OPEN SEARCH FORM")
+    fun openSearchForm(navHostController: NavHostController) {
+        NavigationUtil.navigate(navHostController, NavigationRouteName.SEARCH)
     }
 
     fun updateColumnCount(count: Int) {
