@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.mogun.domain.model.Product
+import com.mogun.domain.model.SearchFilter
 import com.mogun.domain.model.SearchKeyword
 import com.mogun.domain.usecase.SearchUseCase
 import com.mogun.presentation.deligate.ProductDelegate
@@ -21,15 +22,30 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val useCase: SearchUseCase
 ) : ViewModel(), ProductDelegate {
+
+    private val searchManager = SearchManager()
     private val _searchResult = MutableStateFlow<List<ProductVM>>(listOf())
     val searchResult: StateFlow<List<ProductVM>> = _searchResult
     val searchKeyword = useCase.getSearchKeywords()
+    val searchFilters = searchManager.filters
 
     fun search(keyword: String) {
         viewModelScope.launch {
-            useCase.search(SearchKeyword(keyword = keyword)).collectLatest {
-                _searchResult.emit(it.map(::convertToProductVM))
-            }
+            searchInternal(keyword)
+        }
+    }
+
+    fun updateFilter(filter: SearchFilter) {
+        viewModelScope.launch {
+            searchManager.updateFilter(filter)
+            searchInternal()
+        }
+    }
+
+    private suspend fun searchInternal(newSearchKeyword: String = "") {
+        useCase.search(keyword = searchManager.searchKeyword, searchManager.currentFilters()).collectLatest {
+            if(newSearchKeyword.isNotEmpty()) searchManager.initSearchManager(newSearchKeyword, it)
+            _searchResult.emit(it.map(::convertToProductVM))
         }
     }
 
