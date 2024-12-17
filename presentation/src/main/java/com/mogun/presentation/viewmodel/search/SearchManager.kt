@@ -23,7 +23,7 @@ class SearchManager {
         var maxPrice = Int.MIN_VALUE
 
         searchResult.forEach { product ->
-            if (!categories.contains(product.category)) {
+            if (categories.find { it.categoryId == product.category.categoryId } == null) {
                 categories.add(product.category)
             }
 
@@ -33,7 +33,7 @@ class SearchManager {
 
         _filters.emit(
             listOf(
-                SearchFilter.PriceFilter(minPrice to maxPrice),
+                SearchFilter.PriceFilter(minPrice.toFloat() to maxPrice.toFloat()),
                 SearchFilter.CategoryFilter(categories)
             )
         )
@@ -54,6 +54,12 @@ class SearchManager {
             }
             it
         })
+    }
+
+    fun clearFilter() {
+        filters.value.forEach {
+            it.clear()
+        }
     }
 
     fun currentFilters(): List<SearchFilter> = filters.value
