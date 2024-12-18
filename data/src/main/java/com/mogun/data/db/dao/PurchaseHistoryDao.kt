@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mogun.data.db.entity.BasketProductEntity
 import com.mogun.data.db.entity.PurchaseHistoryEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -16,10 +15,10 @@ interface PurchaseHistoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: PurchaseHistoryEntity)
 
-    @Query("SELECT * FROM history WHERE productId = :id")
+    @Query("SELECT * FROM history WHERE id = :id")
     suspend fun get(id: String): PurchaseHistoryEntity?
 
-    @Query("DELETE FROM history WHERE productId = :id")
+    @Query("DELETE FROM history WHERE id = :id")
     suspend fun delete(id: String)
 
     @Query("DELETE FROM history")
