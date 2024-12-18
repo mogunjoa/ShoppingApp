@@ -13,6 +13,7 @@ import com.mogun.domain.model.Product
 import com.mogun.domain.model.Ranking
 import com.mogun.domain.usecase.AccountUseCase
 import com.mogun.domain.usecase.CategoryUseCase
+import com.mogun.domain.usecase.LikeUseCase
 import com.mogun.domain.usecase.MainUseCase
 import com.mogun.presentation.deligate.BannerDelegate
 import com.mogun.presentation.deligate.CategoryDelegate
@@ -36,11 +37,13 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val mainUseCase: MainUseCase,
     categoryUseCase: CategoryUseCase,
-    private val accountUseCase: AccountUseCase
+    private val accountUseCase: AccountUseCase,
+    likeUseCase: LikeUseCase
 ) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount: StateFlow<Int> = _columnCount
     val modelList = mainUseCase.getModelList().map(::convertToPresentationVM)
+    val likeProducts = likeUseCase.getLikeProduct().map(::convertToPresentationVM)
     val categories = categoryUseCase.getCategories()
     val accountInfo = accountUseCase.getAccountInfo()
 

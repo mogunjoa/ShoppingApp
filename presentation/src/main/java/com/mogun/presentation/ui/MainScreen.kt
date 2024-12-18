@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.gson.Gson
 import com.mogun.domain.model.Category
 import com.mogun.presentation.ui.category.CategoryScreen
+import com.mogun.presentation.ui.main.LikeScreen
 import com.mogun.presentation.ui.main.MainCategoryScreen
 import com.mogun.presentation.ui.main.MainHomeScreen
 import com.mogun.presentation.ui.main.MyPageScreen
@@ -94,6 +95,7 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
     val bottomNavigationItems = listOf(
         NavigationItem.MainNav.Home,
         NavigationItem.MainNav.Category,
+        NavigationItem.MainNav.LIKE,
         NavigationItem.MainNav.MyPage,
     )
 
@@ -141,6 +143,9 @@ fun MainNaviationScreen(
         }
         composable(NavigationRouteName.MAIN_MY_PAGE) {
             MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
+        }
+        composable(NavigationRouteName.MAIN_LIKE) {
+            LikeScreen(navHostController = navHostController, viewModel = viewModel)
         }
         composable(
             NavigationRouteName.CATEGORY + "/{category}",
