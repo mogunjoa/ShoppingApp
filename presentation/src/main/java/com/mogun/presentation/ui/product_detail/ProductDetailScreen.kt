@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mogun.presentation.R
 import com.mogun.presentation.ui.theme.Purple80
+import com.mogun.presentation.utils.NumberUtils
 import com.mogun.presentation.viewmodel.product_detail.ProductDetailViewModel
 
 @Composable
@@ -74,7 +78,6 @@ fun ProductDetailScreen(productId: String, viewModel: ProductDetailViewModel = h
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(10.dp)
                 ) {
                     Card(
                         modifier = Modifier.size(50.dp),
@@ -88,17 +91,19 @@ fun ProductDetailScreen(productId: String, viewModel: ProductDetailViewModel = h
                             contentScale = ContentScale.Crop
                         )
                     }
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "${product?.shop?.shopName}에서 판매중인 상품",
+                        text = "${product?.shop?.shopName}",
                         fontSize = 16.sp
                     )
                 }
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = "${product?.productName}",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = "${product?.productName}의 상품 상세 페이지 설명글입니다.",
                     fontSize = 12.sp
@@ -106,28 +111,37 @@ fun ProductDetailScreen(productId: String, viewModel: ProductDetailViewModel = h
             }
         }
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${product?.price?.finalPrice}",
+                text = "${NumberUtils.numberFormatPrice(product?.price?.finalPrice)}원",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.width(12.dp))
             Button(
-                onClick = { viewModel.addCard(productId) },
+                onClick = { viewModel.addBasket(product) },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Purple80,
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth().padding(5.dp),
-                    fontSize = 16.sp,
-                    text = "카트에 담기"
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.ShoppingCart,
+                        contentDescription = "ShoppingCartIcon"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                        fontSize = 16.sp,
+                        text = "장바구니 담기"
+                    )
+                }
             }
         }
     }

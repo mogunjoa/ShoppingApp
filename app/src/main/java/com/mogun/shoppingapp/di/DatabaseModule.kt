@@ -3,6 +3,7 @@ package com.mogun.shoppingapp.di
 import android.content.Context
 import androidx.room.Room
 import com.mogun.data.db.ApplicationDatabase
+import com.mogun.data.db.dao.BasketDao
 import com.mogun.data.db.dao.LikeDao
 import com.mogun.data.db.dao.SearchDao
 import dagger.Module
@@ -39,5 +40,11 @@ object DatabaseModule {
     @Singleton
     fun provideLikeDao(database: ApplicationDatabase): LikeDao {
         return database.likeDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBasketDao(database: ApplicationDatabase): BasketDao {
+        return database.basketDao()
     }
 }

@@ -1,12 +1,14 @@
 package com.mogun.presentation.viewmodel.product_detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mogun.domain.model.Product
 import com.mogun.domain.usecase.ProductDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,11 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun addCard(productId: String) {
+    fun addBasket(product: Product?) {
+        product ?: return
 
+        viewModelScope.launch {
+            useCase.addBasket(product)
+        }
     }
 }
