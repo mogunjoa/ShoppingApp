@@ -65,6 +65,9 @@ dependencies {
     // KAKAO
     implementation(libs.v2.user) // 카카오 로그인 API 모듈
 
+    // Coil
+    implementation(libs.coil.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
