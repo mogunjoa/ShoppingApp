@@ -15,4 +15,8 @@ class CarouselVM(model: Carousel, private val productDelegate: ProductDelegate):
     private fun sendCarouselLog() {
 
     }
+
+    fun likeProduct(product: Product) {
+        productDelegate.likeProduct(product)
+    }
 }

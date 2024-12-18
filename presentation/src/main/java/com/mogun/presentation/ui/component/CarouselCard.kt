@@ -2,6 +2,7 @@ package com.mogun.presentation.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +12,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,7 +51,7 @@ fun CarouselCard(navHostController: NavHostController, presentationVM: CarouselV
                 .wrapContentHeight()
         ) {
             items(presentationVM.model.productList.size) { index ->
-                CarouselProductCard(product = presentationVM.model.productList[index]) { model ->
+                CarouselProductCard(product = presentationVM.model.productList[index], presentationVM) { model ->
                     presentationVM.openCarouselProduct(navHostController, model)
                 }
             }
@@ -54,7 +60,7 @@ fun CarouselCard(navHostController: NavHostController, presentationVM: CarouselV
 }
 
 @Composable
-private fun CarouselProductCard(product: Product, onClick: (Product) -> Unit) {
+private fun CarouselProductCard(product: Product, presentationVM: CarouselVM, onClick: (Product) -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -67,26 +73,37 @@ private fun CarouselProductCard(product: Product, onClick: (Product) -> Unit) {
         ),
         onClick = { onClick(product) }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.product_image),
-                contentDescription = "description",
-                contentScale = ContentScale.Crop,
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                onClick = { presentationVM.likeProduct(product) },
+                modifier = Modifier.align(Alignment.BottomEnd)
+            ) {
+                Icon(
+                    if (product.isLike) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    "FavoriteIcon"
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
-            Text(
-                fontSize = 14.sp,
-                text = product.productName
-            )
-            Price(product = product)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.product_image),
+                    contentDescription = "description",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                )
+                Text(
+                    fontSize = 14.sp,
+                    text = product.productName
+                )
+                Price(product = product)
+            }
         }
     }
 }

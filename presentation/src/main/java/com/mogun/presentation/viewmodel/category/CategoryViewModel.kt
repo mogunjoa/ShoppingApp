@@ -1,6 +1,7 @@
 package com.mogun.presentation.viewmodel.category
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.mogun.domain.model.Category
 import com.mogun.domain.model.Product
@@ -13,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +35,12 @@ class CategoryViewModel @Inject constructor(
         product: Product
     ) {
         NavigationUtil.navigate(navHostController, NavigationRouteName.PRODUCT_DETAIL, product)
+    }
+
+    override fun likeProduct(product: Product) {
+        viewModelScope.launch {
+            useCase.likeProduct(product)
+        }
     }
 
     private fun convertToPresentationVM(list: List<Product>): List<ProductVM> {

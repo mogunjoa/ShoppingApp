@@ -33,8 +33,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCase: CategoryUseCase, private val accountUseCase: AccountUseCase)
-    : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
+class MainViewModel @Inject constructor(
+    private val mainUseCase: MainUseCase,
+    categoryUseCase: CategoryUseCase,
+    private val accountUseCase: AccountUseCase
+) : ViewModel(), ProductDelegate, BannerDelegate, CategoryDelegate {
     private val _columnCount = MutableStateFlow(DEFAULT_COLUMN_COUNT)
     val columnCount: StateFlow<Int> = _columnCount
     val modelList = mainUseCase.getModelList().map(::convertToPresentationVM)
@@ -63,8 +66,14 @@ class MainViewModel @Inject constructor(mainUseCase: MainUseCase, categoryUseCas
         }
     }
 
-    override fun openProduct(navController: NavHostController,product: Product) {
+    override fun openProduct(navController: NavHostController, product: Product) {
         NavigationUtil.navigate(navController, NavigationRouteName.PRODUCT_DETAIL, product)
+    }
+
+    override fun likeProduct(product: Product) {
+        viewModelScope.launch {
+            mainUseCase.likeProduct(product)
+        }
     }
 
     override fun openBanner(bannerId: String) {
