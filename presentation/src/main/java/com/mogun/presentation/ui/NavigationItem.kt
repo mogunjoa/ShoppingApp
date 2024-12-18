@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.mogun.domain.model.Category
 import com.mogun.domain.model.Product
+import com.mogun.presentation.ui.NavigationRouteName.BASKET
 import com.mogun.presentation.ui.NavigationRouteName.CATEGORY
 import com.mogun.presentation.ui.NavigationRouteName.MAIN_CATEGORY
 import com.mogun.presentation.ui.NavigationRouteName.MAIN_HOME
@@ -17,15 +18,16 @@ import com.mogun.presentation.ui.NavigationRouteName.PRODUCT_DETAIL
 import com.mogun.presentation.ui.NavigationRouteName.SEARCH
 
 sealed class NavigationItem(open val route: String) {
-    sealed class MainNav(override val route: String, val icon: ImageVector, val name: String): NavigationItem(route) {
-            object Home : MainNav(MAIN_HOME, Icons.Filled.Home, MAIN_HOME)
-            object Category : MainNav(MAIN_CATEGORY, Icons.Filled.Star, MAIN_CATEGORY)
-            object MyPage : MainNav(MAIN_MY_PAGE, Icons.Filled.AccountBox, MAIN_MY_PAGE)
-            object LIKE: MainNav(MAIN_LIKE, Icons.Filled.Favorite, MAIN_LIKE)
+    sealed class MainNav(override val route: String, val icon: ImageVector, val name: String) :
+        NavigationItem(route) {
+        object Home : MainNav(MAIN_HOME, Icons.Filled.Home, MAIN_HOME)
+        object Category : MainNav(MAIN_CATEGORY, Icons.Filled.Star, MAIN_CATEGORY)
+        object MyPage : MainNav(MAIN_MY_PAGE, Icons.Filled.AccountBox, MAIN_MY_PAGE)
+        object LIKE : MainNav(MAIN_LIKE, Icons.Filled.Favorite, MAIN_LIKE)
 
         companion object {
             fun isMainRoute(route: String?): Boolean {
-                return when(route) {
+                return when (route) {
                     MAIN_HOME, MAIN_LIKE, MAIN_CATEGORY, MAIN_MY_PAGE -> true
                     else -> false
                 }
@@ -33,9 +35,10 @@ sealed class NavigationItem(open val route: String) {
         }
     }
 
-    data class CategoryNav( val category: Category): NavigationItem(CATEGORY)
-    data class ProductNav(val product: Product): NavigationItem(PRODUCT_DETAIL)
-    object SearchNav: NavigationItem(SEARCH)
+    data class CategoryNav(val category: Category) : NavigationItem(CATEGORY)
+    data class ProductNav(val product: Product) : NavigationItem(PRODUCT_DETAIL)
+    object SearchNav : NavigationItem(SEARCH)
+    object BasketNav : NavigationItem(BASKET)
 }
 
 object NavigationRouteName {
@@ -46,4 +49,5 @@ object NavigationRouteName {
     const val CATEGORY = "category"
     const val PRODUCT_DETAIL = "product_detail"
     const val SEARCH = "search"
+    const val BASKET = "basket"
 }

@@ -24,6 +24,7 @@ import com.mogun.presentation.model.CarouselVM
 import com.mogun.presentation.model.PresentationVM
 import com.mogun.presentation.model.ProductVM
 import com.mogun.presentation.model.RankingVM
+import com.mogun.presentation.ui.NavigationItem
 import com.mogun.presentation.ui.NavigationRouteName
 import com.mogun.presentation.utils.NavigationUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +47,10 @@ class MainViewModel @Inject constructor(
     val likeProducts = likeUseCase.getLikeProduct().map(::convertToPresentationVM)
     val categories = categoryUseCase.getCategories()
     val accountInfo = accountUseCase.getAccountInfo()
+
+    fun openBasket(navHostController: NavHostController) {
+        NavigationUtil.navigate(navHostController, NavigationRouteName.BASKET)
+    }
 
     fun signIn(accountInfo: AccountInfo) {
         viewModelScope.launch {
