@@ -24,9 +24,10 @@ import com.mogun.presentation.model.CarouselVM
 import com.mogun.presentation.model.PresentationVM
 import com.mogun.presentation.model.ProductVM
 import com.mogun.presentation.model.RankingVM
+import com.mogun.presentation.ui.BasketNav
 import com.mogun.presentation.ui.CategoryNav
-import com.mogun.presentation.ui.NavigationItem
-import com.mogun.presentation.ui.NavigationRouteName
+import com.mogun.presentation.ui.ProductDetailNav
+import com.mogun.presentation.ui.SearchNav
 import com.mogun.presentation.utils.NavigationUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,7 @@ class MainViewModel @Inject constructor(
     val accountInfo = accountUseCase.getAccountInfo()
 
     fun openBasket(navHostController: NavHostController) {
-        NavigationUtil.navigate(navHostController, NavigationRouteName.BASKET)
+        NavigationUtil.navigate(navHostController, BasketNav.route)
     }
 
     fun signIn(accountInfo: AccountInfo) {
@@ -66,7 +67,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun openSearchForm(navHostController: NavHostController) {
-        NavigationUtil.navigate(navHostController, NavigationRouteName.SEARCH)
+        NavigationUtil.navigate(navHostController, SearchNav.route)
     }
 
     fun updateColumnCount(count: Int) {
@@ -76,7 +77,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openProduct(navController: NavHostController, product: Product) {
-        NavigationUtil.navigate(navController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtil.navigate(navController, ProductDetailNav.navigateWithArg(product.productId))
     }
 
     override fun likeProduct(product: Product) {

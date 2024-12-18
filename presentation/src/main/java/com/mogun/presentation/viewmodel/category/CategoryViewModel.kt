@@ -8,7 +8,7 @@ import com.mogun.domain.model.Product
 import com.mogun.domain.usecase.CategoryUseCase
 import com.mogun.presentation.deligate.ProductDelegate
 import com.mogun.presentation.model.ProductVM
-import com.mogun.presentation.ui.NavigationRouteName
+import com.mogun.presentation.ui.ProductDetailNav
 import com.mogun.presentation.utils.NavigationUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ class CategoryViewModel @Inject constructor(
         navHostController: NavHostController,
         product: Product
     ) {
-        NavigationUtil.navigate(navHostController, NavigationRouteName.PRODUCT_DETAIL, product)
+        NavigationUtil.navigate(navHostController, ProductDetailNav.navigateWithArg(product.productId))
     }
 
     override fun likeProduct(product: Product) {
