@@ -24,6 +24,7 @@ import com.mogun.presentation.model.CarouselVM
 import com.mogun.presentation.model.PresentationVM
 import com.mogun.presentation.model.ProductVM
 import com.mogun.presentation.model.RankingVM
+import com.mogun.presentation.ui.CategoryNav
 import com.mogun.presentation.ui.NavigationItem
 import com.mogun.presentation.ui.NavigationRouteName
 import com.mogun.presentation.utils.NavigationUtil
@@ -89,7 +90,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun openCategory(navHostController: NavHostController, category: Category) {
-        NavigationUtil.navigate(navHostController, NavigationRouteName.CATEGORY, category)
+        NavigationUtil.navigate(navHostController, CategoryNav.navigateWithArg(category))
     }
 
     private fun convertToPresentationVM(list: List<BaseModel>): List<PresentationVM<out BaseModel>> {
