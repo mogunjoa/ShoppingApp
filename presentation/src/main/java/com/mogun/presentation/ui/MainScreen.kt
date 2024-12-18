@@ -2,6 +2,7 @@ package com.mogun.presentation.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
@@ -12,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -40,6 +42,8 @@ import com.mogun.presentation.ui.purchase_history.PurchaseHistoryScreen
 import com.mogun.presentation.ui.search.SearchScreen
 import com.mogun.presentation.utils.NavigationUtil
 import com.mogun.presentation.viewmodel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,18 +63,27 @@ fun MainScreen(googleSignInClient: GoogleSignInClient) {
             )
         },
         containerColor = Color.White,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    modifier = Modifier.padding(50.dp),
+                    shape = RoundedCornerShape(10.dp)
+                )
+            }
+        },
         bottomBar = {
             if (MainNav.isMainRoute(currentRoute)) {
                 MainBottomNavigationBar(navController, currentRoute)
             }
-        }
+        },
     ) {
         Box(modifier = Modifier.padding(top = it.calculateTopPadding() + 10.dp)) {
             MainNaviationScreen(
                 viewModel = viewModel,
                 navHostController = navController,
-                googleSignInClient = googleSignInClient
+                googleSignInClient = googleSignInClient,
+                snackbarHostState = snackbarHostState
             )
         }
     }
@@ -145,7 +158,8 @@ fun MainBottomNavigationBar(navController: NavHostController, currentRoute: Stri
 fun MainNaviationScreen(
     viewModel: MainViewModel,
     navHostController: NavHostController,
-    googleSignInClient: GoogleSignInClient
+    googleSignInClient: GoogleSignInClient,
+    snackbarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = navHostController,
@@ -158,13 +172,17 @@ fun MainNaviationScreen(
             MainCategoryScreen(viewModel, navHostController)
         }
         composable(route = MainNav.MyPage.route, deepLinks = MainNav.MyPage.deepLink) {
-            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient, navHostController = navHostController)
+            MyPageScreen(
+                viewModel = viewModel,
+                googleSignInClient = googleSignInClient,
+                navHostController = navHostController
+            )
         }
         composable(route = MainNav.Like.route, deepLinks = MainNav.Like.deepLink) {
             LikeScreen(navHostController = navHostController, viewModel = viewModel)
         }
         composable(route = BasketNav.route, deepLinks = BasketNav.deepLink) {
-            BasketScreen()
+            BasketScreen(snackbarHostState)
         }
         composable(route = PurchaseHistoryNav.route, deepLinks = PurchaseHistoryNav.deepLink) {
             PurchaseHistoryScreen()
@@ -192,5 +210,17 @@ fun MainNaviationScreen(
         composable(route = SearchNav.route, deepLinks = SearchNav.deepLink) {
             SearchScreen(navHostController)
         }
+    }
+}
+
+fun popupSnackBar(
+    scope: CoroutineScope,
+    scaffoldState: SnackbarHostState,
+    message: String,
+    onDismissCallback: () -> Unit = {}
+) {
+    scope.launch {
+        scaffoldState.showSnackbar(message = message)
+        onDismissCallback.invoke()
     }
 }

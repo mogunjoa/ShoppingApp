@@ -19,8 +19,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,12 +39,33 @@ import com.mogun.presentation.R
 import com.mogun.presentation.ui.component.Price
 import com.mogun.presentation.viewmodel.basket.BasketViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import com.mogun.presentation.ui.popupSnackBar
 import com.mogun.presentation.ui.theme.Purple80
 import com.mogun.presentation.utils.NumberUtils
+import com.mogun.presentation.viewmodel.basket.BasketAction
+import com.mogun.presentation.viewmodel.basket.BasketEvent
 
 @Composable
-fun BasketScreen(viewModel: BasketViewModel = hiltViewModel()) {
+fun BasketScreen(
+    snackbarHostState: SnackbarHostState,
+    viewModel: BasketViewModel = hiltViewModel()
+) {
     val basketProduct by viewModel.basketProduct.collectAsState(initial = listOf())
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                BasketEvent.ShowSnackbar -> {
+                    popupSnackBar(
+                        scope = scope,
+                        scaffoldState = snackbarHostState,
+                        message = "결제 되었습니다."
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -57,13 +80,15 @@ fun BasketScreen(viewModel: BasketViewModel = hiltViewModel()) {
         ) {
             items(basketProduct.size) { index ->
                 BasketProductCard(basketProduct = basketProduct[index]) { product ->
-                    viewModel.removeBasketProduct(product)
+                    viewModel.dispatch(BasketAction.RemoveProduct(product))
                 }
             }
         }
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = {
+                viewModel.dispatch(BasketAction.CheckoutBasket(basketProduct))
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Purple80),
             shape = RoundedCornerShape(12.dp)
         ) {

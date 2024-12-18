@@ -12,5 +12,11 @@ class BasketUseCase @Inject constructor(
 
     fun getBasketProducts(): Flow<List<BasketProduct>> = basketRepository.getBasketProducts()
 
-    suspend fun removeBasketProduct(product: Product) = basketRepository.removeBasketProduct(product = product)
+    suspend fun removeBasketProduct(product: Product) {
+        basketRepository.removeBasketProduct(product = product)
+    }
+
+    suspend fun checkoutBasket(products: List<BasketProduct>) {
+        basketRepository.checkoutBasket(products = products)
+    }
 }
