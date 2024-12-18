@@ -6,6 +6,7 @@ import com.mogun.data.repository.CategoryRepositoryImpl
 import com.mogun.data.repository.LikeRepositoryImpl
 import com.mogun.data.repository.MainRepositoryImpl
 import com.mogun.data.repository.ProductDetailRepositoryImpl
+import com.mogun.data.repository.PurchaseHistoryRepositoryImpl
 import com.mogun.data.repository.SearchRepositoryImpl
 import com.mogun.data.repository.TempRepositoryImpl
 import com.mogun.domain.repository.AccountRepository
@@ -14,6 +15,7 @@ import com.mogun.domain.repository.CategoryRepository
 import com.mogun.domain.repository.LikeRepository
 import com.mogun.domain.repository.MainRepository
 import com.mogun.domain.repository.ProductDetailRepository
+import com.mogun.domain.repository.PurchaseHistoryRepository
 import com.mogun.domain.repository.SearchRepository
 import com.mogun.domain.repository.TempRepository
 import dagger.Binds
@@ -57,4 +59,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindBasketRepository(basketRepositoryImpl: BasketRepositoryImpl): BasketRepository
+
+    @Binds
+    @Singleton
+    fun bindPurchaseHistoryRepository(purchaseHistoryRepositoryImpl: PurchaseHistoryRepositoryImpl): PurchaseHistoryRepository
 }

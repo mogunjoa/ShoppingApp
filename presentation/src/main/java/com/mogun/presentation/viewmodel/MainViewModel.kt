@@ -27,6 +27,7 @@ import com.mogun.presentation.model.RankingVM
 import com.mogun.presentation.ui.BasketNav
 import com.mogun.presentation.ui.CategoryNav
 import com.mogun.presentation.ui.ProductDetailNav
+import com.mogun.presentation.ui.PurchaseHistoryNav
 import com.mogun.presentation.ui.SearchNav
 import com.mogun.presentation.utils.NavigationUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,10 +51,6 @@ class MainViewModel @Inject constructor(
     val categories = categoryUseCase.getCategories()
     val accountInfo = accountUseCase.getAccountInfo()
 
-    fun openBasket(navHostController: NavHostController) {
-        NavigationUtil.navigate(navHostController, BasketNav.route)
-    }
-
     fun signIn(accountInfo: AccountInfo) {
         viewModelScope.launch {
             accountUseCase.signIn(accountInfo)
@@ -70,14 +67,22 @@ class MainViewModel @Inject constructor(
         NavigationUtil.navigate(navHostController, SearchNav.route)
     }
 
-    fun updateColumnCount(count: Int) {
-        viewModelScope.launch {
-            _columnCount.emit(count)
-        }
+    fun openBasket(navHostController: NavHostController) {
+        NavigationUtil.navigate(navHostController, BasketNav.route)
+    }
+
+    fun openPurchaseHistory(navHostController: NavHostController) {
+        NavigationUtil.navigate(navHostController, PurchaseHistoryNav.route)
     }
 
     override fun openProduct(navController: NavHostController, product: Product) {
         NavigationUtil.navigate(navController, ProductDetailNav.navigateWithArg(product.productId))
+    }
+
+    fun updateColumnCount(count: Int) {
+        viewModelScope.launch {
+            _columnCount.emit(count)
+        }
     }
 
     override fun likeProduct(product: Product) {

@@ -7,6 +7,7 @@ import com.mogun.presentation.ui.Destination
 import com.mogun.presentation.ui.MainNav
 import com.mogun.presentation.ui.NavigationRouteName
 import com.mogun.presentation.ui.ProductDetailNav
+import com.mogun.presentation.ui.PurchaseHistoryNav
 import com.mogun.presentation.ui.SearchNav
 
 object NavigationUtil {
@@ -34,6 +35,7 @@ object NavigationUtil {
             NavigationRouteName.MAIN_CATEGORY -> MainNav.Category
             NavigationRouteName.SEARCH -> SearchNav
             NavigationRouteName.BASKET -> BasketNav
+            NavigationRouteName.PURCHASE_HISTORY -> PurchaseHistoryNav
 
             ProductDetailNav.routeWithArgName() -> ProductDetailNav
             CategoryNav.routeWithArgName() -> CategoryNav

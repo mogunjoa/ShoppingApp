@@ -36,6 +36,7 @@ import com.mogun.presentation.ui.main.MainCategoryScreen
 import com.mogun.presentation.ui.main.MainHomeScreen
 import com.mogun.presentation.ui.main.MyPageScreen
 import com.mogun.presentation.ui.product_detail.ProductDetailScreen
+import com.mogun.presentation.ui.purchase_history.PurchaseHistoryScreen
 import com.mogun.presentation.ui.search.SearchScreen
 import com.mogun.presentation.utils.NavigationUtil
 import com.mogun.presentation.viewmodel.MainViewModel
@@ -157,13 +158,16 @@ fun MainNaviationScreen(
             MainCategoryScreen(viewModel, navHostController)
         }
         composable(route = MainNav.MyPage.route, deepLinks = MainNav.MyPage.deepLink) {
-            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient)
+            MyPageScreen(viewModel = viewModel, googleSignInClient = googleSignInClient, navHostController = navHostController)
         }
         composable(route = MainNav.Like.route, deepLinks = MainNav.Like.deepLink) {
             LikeScreen(navHostController = navHostController, viewModel = viewModel)
         }
         composable(route = BasketNav.route, deepLinks = BasketNav.deepLink) {
             BasketScreen()
+        }
+        composable(route = PurchaseHistoryNav.route, deepLinks = PurchaseHistoryNav.deepLink) {
+            PurchaseHistoryScreen()
         }
         composable(
             route = CategoryNav.routeWithArgName(),
